@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.fontcdn.ir/Font/Persian/Shabnam/Shabnam.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Modern Faber-Castell-like Color Palette (Adjusted) */
         :root {
@@ -17,7 +18,7 @@
             --orange-dark: #cc7000;
             --text-color-light: #2c3e50;
             --bg-color-light: #f5f8f0;
-            --panel-bg-light: rgba(255, 255, 255, 0.8);
+            --panel-bg-light: rgba(255, 255, 255, 0.4);
             --border-color-light: #d4d9cc;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --icon-color-light: #2c3e50;
@@ -31,7 +32,7 @@
             --orange-dark: #cc8400;
             --text-color-light: #f5f8f0;
             --bg-color-light: #1c2a37;
-            --panel-bg-light: rgba(44, 62, 80, 0.8);
+            --panel-bg-light: rgba(44, 62, 80, 0.4);
             --border-color-light: #4a6572;
             --shadow-color: rgba(255, 255, 255, 0.1);
             --icon-color-light: #f5f8f0;
@@ -138,7 +139,6 @@
             display: inline-block;
         }
 
-
         .lang-switch {
             position: relative;
             display: inline-block;
@@ -186,6 +186,59 @@
             transform: translateX(26px);
             background-color: var(--orange-main);
         }
+        
+        .lang-slider #fa-label {
+            position: absolute;
+            right: 8px;
+            z-index: 1;
+        }
+        .lang-slider #en-label {
+            position: absolute;
+            left: 8px;
+            z-index: 1;
+        }
+
+        /* Dropdown for download options */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--panel-bg-light);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color-light);
+            direction: rtl;
+        }
+        
+        .dropdown-content button {
+            color: var(--text-color-light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: right;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-content button:hover {
+            background-color: var(--green-main);
+            color: white;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
 
         /* Control Panels */
         .control-panel-group {
@@ -195,21 +248,46 @@
             gap: 16px;
             width: 100%;
         }
-
+        
+        .panel-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+            padding: 24px;
+            pointer-events: none;
+        }
+        
         .panel {
             background-color: var(--panel-bg-light);
             border-radius: 12px;
             padding: 16px;
-            flex: 1;
             min-width: 250px;
             box-shadow: 0 4px 6px var(--shadow-color);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color-light);
             text-align: right;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            transition: background 0.5s ease, border 0.5s ease;
+            transition: all 0.5s ease;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 16px;
+            opacity: 0;
+            pointer-events: auto;
+            align-self: flex-end;
+        }
+        
+        .panel.open {
+            max-height: 1000px;
+            padding: 16px;
+            opacity: 1;
         }
 
         .panel-header {
@@ -240,6 +318,7 @@
             gap: 8px;
             width: fit-content;
             margin: 0 auto 24px auto;
+            pointer-events: auto;
         }
 
         .custom-file-upload:hover {
@@ -260,6 +339,7 @@
             font-family: inherit;
             background-color: var(--panel-bg-light);
             color: var(--text-color-light);
+            pointer-events: auto;
         }
 
         input:focus, select:focus {
@@ -318,6 +398,11 @@
         button.secondary:hover {
             background: var(--orange-dark);
         }
+        
+        .btn-group {
+            display: flex;
+            gap: 16px;
+        }
 
         .slider-group {
             display: flex;
@@ -330,6 +415,10 @@
             text-align: right;
             font-size: 0.9rem;
             color: var(--text-color-light);
+        }
+        
+        [lang="en"] .slider-group label {
+            text-align: left;
         }
 
         .slider-group input[type="range"] {
@@ -436,6 +525,13 @@
         }
 
         /* Canvas & Interaction */
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         .canvas-container {
             position: relative;
             max-width: 100%;
@@ -443,6 +539,8 @@
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             border: 1px solid var(--border-color-light);
+            width: 100%;
+            height: auto;
         }
 
         canvas {
@@ -472,7 +570,53 @@
             gap: 16px;
             width: 100%;
         }
-
+        
+        /* New Circle Styles */
+        .circles-container {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: -8px;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+        
+        .circle {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            pointer-events: auto;
+        }
+        
+        .night-mode .circle {
+            background-color: rgba(44, 62, 80, 0.5);
+        }
+        
+        .circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .circle.active {
+            box-shadow: 0 0 0 4px var(--orange-main);
+        }
+        
+        .circle svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--icon-color-light);
+            stroke-width: 2;
+            fill: none;
+        }
     </style>
 </head>
 <body>
@@ -493,9 +637,22 @@
                     </label>
                 </div>
                 <div class="top-right-controls">
-                     <button class="primary" id="downloadBtn">دانلود عکس</button>
-                     <button class="secondary" id="downloadTextBtn">دانلود متن</button>
-                     <button class="primary" id="copyStickerBtn">کپی استیکر</button>
+                     <div class="dropdown">
+                        <button class="primary" id="downloadBtn">دانلود عکس</button>
+                        <div class="dropdown-content">
+                            <button id="downloadHigh">کیفیت بالا</button>
+                            <button id="downloadMedium">کیفیت متوسط</button>
+                            <button id="downloadLow">کیفیت پایین</button>
+                        </div>
+                     </div>
+                     <div class="dropdown">
+                        <button class="secondary" id="downloadTextBtn">دانلود متن</button>
+                         <div class="dropdown-content">
+                            <button id="downloadTextHigh">کیفیت بالا</button>
+                            <button id="downloadTextMedium">کیفیت متوسط</button>
+                            <button id="downloadTextLow">کیفیت پایین</button>
+                        </div>
+                     </div>
                 </div>
              </div>
              <div class="header">
@@ -504,123 +661,139 @@
              </div>
         </div>
        
-        <label for="imageInput" class="custom-file-upload">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-            <span id="label-image">آپلود عکس</span>
-        </label>
-        <input type="file" id="imageInput" accept="image/*">
-
-        <div class="control-panel-group">
-            <div class="panel">
-                <div class="panel-header" id="panel-text">متن</div>
-                <input type="text" id="textInput" placeholder="متن خودت رو بنویس">
-                
-                <div class="font-add-group">
-                    <label for="fontSelector" id="label-font">فونت</label>
-                    <select id="fontSelector">
-                        <option value="Vazirmatn" selected>Vazirmatn</option>
-                        <option value="Shabnam">Shabnam</option>
-                    </select>
-                     <label for="fontInput" class="add-font-btn">+</label>
-                     <input type="file" id="fontInput" accept=".ttf,.otf">
-                </div>
-
-                <div class="slider-group">
-                    <label for="fontSizeSlider" id="label-font-size">سایز فونت</label>
-                    <input type="range" id="fontSizeSlider" min="0" max="100" value="50">
-                    <span id="fontSizeValue" class="slider-value">۵۰</span>
-                </div>
+        <div class="circles-container">
+            <div class="circle" id="circle-text">
+                <i class="fa-solid fa-font fa-xl" style="color: var(--icon-color-light);"></i>
             </div>
-
-            <div class="panel">
-                <div class="panel-header" id="panel-color-opacity">رنگ و اپسیتی</div>
-                
-                <div class="color-toggle-container">
-                    <span class="color-toggle-label" id="label-black-white-text">رنگ متن سیاه/سفید</span>
-                    <label class="color-toggle-switch">
-                        <input type="checkbox" id="blackWhiteToggle">
-                        <span class="color-toggle-slider"></span>
-                    </label>
-                </div>
-                
-                <div class="color-panel-group">
-                    <div class="slider-group">
-                        <label for="redSlider" id="label-red">قرمز</label>
-                        <input type="range" id="redSlider" min="0" max="255" value="0">
-                        <span id="redValue" class="slider-value">۰</span>
-                    </div>
-                    <div class="slider-group">
-                        <label for="greenSlider" id="label-green">سبز</label>
-                        <input type="range" id="greenSlider" min="0" max="255" value="0">
-                        <span id="greenValue" class="slider-value">۰</span>
-                    </div>
-                    <div class="slider-group">
-                        <label for="blueSlider" id="label-blue">آبی</label>
-                        <input type="range" id="blueSlider" min="0" max="255" value="0">
-                        <span id="blueValue" class="slider-value">۰</span>
-                    </div>
-                </div>
-
-                <div class="slider-group">
-                    <label for="opacitySlider" id="label-opacity">اپسیتی متن</label>
-                    <input type="range" id="opacitySlider" min="0" max="100" value="100">
-                    <span id="opacityValue" class="slider-value">۱۰۰٪</span>
-                </div>
+            <div class="circle" id="circle-color">
+                <i class="fa-solid fa-palette fa-xl" style="color: var(--icon-color-light);"></i>
             </div>
-
-            <div class="panel">
-                <div class="panel-header" id="panel-effects">افکت‌ها</div>
-                <div class="slider-group">
-                    <label for="shadowSlider" id="label-shadow">سایه</label>
-                    <input type="range" id="shadowSlider" min="0" max="20" value="0">
-                    <span id="shadowValue" class="slider-value">۰</span>
-                </div>
-                <div class="slider-group">
-                    <label for="strokeSlider" id="label-stroke">حاشیه</label>
-                    <input type="range" id="strokeSlider" min="0" max="10" value="0">
-                    <span id="strokeValue" class="slider-value">۰</span>
-                </div>
-                <div class="slider-group">
-                    <label for="glowSlider" id="label-glow">درخشش</label>
-                    <input type="range" id="glowSlider" min="0" max="20" value="0">
-                    <span id="glowValue" class="slider-value">۰</span>
-                </div>
-
-                <div class="backdrop-panel">
-                    <div class="panel-header" id="panel-backdrop">کادر پشت متن</div>
-                    <div class="color-toggle-container">
-                        <span class="color-toggle-label" id="label-black-white-backdrop">رنگ کادر سیاه/سفید</span>
-                        <label class="color-toggle-switch">
-                            <input type="checkbox" id="blackWhiteBackdropToggle">
-                            <span class="color-toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="slider-group">
-                        <label for="backdropOpacitySlider" id="label-backdrop-opacity">اپسیتی کادر</label>
-                        <input type="range" id="backdropOpacitySlider" min="0" max="100" value="0">
-                        <span id="backdropOpacityValue" class="slider-value">۰٪</span>
-                    </div>
-                    <div class="slider-group">
-                        <label for="backdropRadiusSlider" id="label-backdrop-radius">گردی گوشه‌ها</label>
-                        <input type="range" id="backdropRadiusSlider" min="0" max="100" value="0">
-                        <span id="backdropRadiusValue" class="slider-value">۰</span>
-                    </div>
-                    <div class="slider-group">
-                        <label for="backdropWidthSlider" id="label-backdrop-width">پهنای کادر</label>
-                        <input type="range" id="backdropWidthSlider" min="0" max="100" value="0">
-                        <span id="backdropWidthValue" class="slider-value">۰</span>
-                    </div>
-                     <div class="slider-group">
-                        <label for="backdropHeightSlider" id="label-backdrop-height">ارتفاع کادر</label>
-                        <input type="range" id="backdropHeightSlider" min="0" max="100" value="0">
-                        <span id="backdropHeightValue" class="slider-value">۰</span>
-                    </div>
-                </div>
+            <div class="circle" id="circle-effects">
+                <i class="fa-solid fa-wand-magic-sparkles fa-xl" style="color: var(--icon-color-light);"></i>
             </div>
         </div>
         
-        <div class="canvas-container">
-            <canvas id="canvas"></canvas>
+        <div class="btn-group">
+            <label for="imageInput" class="custom-file-upload">
+                <i class="fa-regular fa-image fa-lg"></i>
+                <span id="label-image">آپلود عکس</span>
+            </label>
+            <input type="file" id="imageInput" accept="image/*">
+            <button class="primary" id="copyStickerBtn">کپی استیکر</button>
+        </div>
+
+
+        <div class="canvas-wrapper">
+            <div class="canvas-container">
+                <canvas id="canvas"></canvas>
+                <div class="panel-container">
+                    <div class="panel" id="panel-text">
+                        <div class="panel-header" id="panel-text-header">متن</div>
+                        <input type="text" id="textInput" placeholder="متن خودت رو بنویس">
+                        
+                        <div class="font-add-group">
+                            <label for="fontSelector" id="label-font">فونت</label>
+                            <select id="fontSelector">
+                                <option value="Vazirmatn" selected>Vazirmatn</option>
+                                <option value="Shabnam">Shabnam</option>
+                            </select>
+                             <label for="fontInput" class="add-font-btn">+</label>
+                             <input type="file" id="fontInput" accept=".ttf,.otf">
+                        </div>
+                        <div class="slider-group">
+                            <label for="fontSizeSlider" id="label-font-size">سایز فونت</label>
+                            <input type="range" id="fontSizeSlider" min="0" max="100" value="50">
+                            <span id="fontSizeValue" class="slider-value">۵۰</span>
+                        </div>
+                    </div>
+
+                    <div class="panel" id="panel-color">
+                        <div class="panel-header" id="panel-color-opacity">رنگ و اپسیتی</div>
+                        
+                        <div class="color-toggle-container">
+                            <span class="color-toggle-label" id="label-black-white-text">رنگ متن سیاه/سفید</span>
+                            <label class="color-toggle-switch">
+                                <input type="checkbox" id="blackWhiteToggle">
+                                <span class="color-toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="color-panel-group">
+                            <div class="slider-group">
+                                <label for="redSlider" id="label-red">قرمز</label>
+                                <input type="range" id="redSlider" min="0" max="255" value="0">
+                                <span id="redValue" class="slider-value">۰</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="greenSlider" id="label-green">سبز</label>
+                                <input type="range" id="greenSlider" min="0" max="255" value="0">
+                                <span id="greenValue" class="slider-value">۰</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="blueSlider" id="label-blue">آبی</label>
+                                <input type="range" id="blueSlider" min="0" max="255" value="0">
+                                <span id="blueValue" class="slider-value">۰</span>
+                            </div>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="opacitySlider" id="label-opacity">اپسیتی متن</label>
+                            <input type="range" id="opacitySlider" min="0" max="100" value="100">
+                            <span id="opacityValue" class="slider-value">۱۰۰٪</span>
+                        </div>
+                    </div>
+
+                    <div class="panel" id="panel-effects">
+                        <div class="panel-header" id="panel-effects-header">افکت‌ها</div>
+                        <div class="slider-group">
+                            <label for="shadowSlider" id="label-shadow">سایه</label>
+                            <input type="range" id="shadowSlider" min="0" max="20" value="0">
+                            <span id="shadowValue" class="slider-value">۰</span>
+                        </div>
+                        <div class="slider-group">
+                            <label for="strokeSlider" id="label-stroke">حاشیه</label>
+                            <input type="range" id="strokeSlider" min="0" max="10" value="0">
+                            <span id="strokeValue" class="slider-value">۰</span>
+                        </div>
+                        <div class="slider-group">
+                            <label for="glowSlider" id="label-glow">درخشش</label>
+                            <input type="range" id="glowSlider" min="0" max="20" value="0">
+                            <span id="glowValue" class="slider-value">۰</span>
+                        </div>
+
+                        <div class="backdrop-panel">
+                            <div class="panel-header" id="panel-backdrop">کادر پشت متن</div>
+                            <div class="color-toggle-container">
+                                <span class="color-toggle-label" id="label-black-white-backdrop">رنگ کادر سیاه/سفید</span>
+                                <label class="color-toggle-switch">
+                                    <input type="checkbox" id="blackWhiteBackdropToggle">
+                                    <span class="color-toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <label for="backdropOpacitySlider" id="label-backdrop-opacity">اپسیتی کادر</label>
+                                <input type="range" id="backdropOpacitySlider" min="0" max="100" value="0">
+                                <span id="backdropOpacityValue" class="slider-value">۰٪</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="backdropRadiusSlider" id="label-backdrop-radius">گردی گوشه‌ها</label>
+                                <input type="range" id="backdropRadiusSlider" min="0" max="100" value="0">
+                                <span id="backdropRadiusValue" class="slider-value">۰</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="backdropWidthSlider" id="label-backdrop-width">پهنای کادر</label>
+                                <input type="range" id="backdropWidthSlider" min="0" max="100" value="0">
+                                <span id="backdropWidthValue" class="slider-value">۰</span>
+                            </div>
+                             <div class="slider-group">
+                                <label for="backdropHeightSlider" id="label-backdrop-height">ارتفاع کادر</label>
+                                <input type="range" id="backdropHeightSlider" min="0" max="100" value="0">
+                                <span id="backdropHeightValue" class="slider-value">۰</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -647,7 +820,12 @@
         const glowValue = document.getElementById('glowValue');
         const downloadBtn = document.getElementById('downloadBtn');
         const downloadTextBtn = document.getElementById('downloadTextBtn');
-        const copyStickerBtn = document.getElementById('copyStickerBtn');
+        const downloadHighBtn = document.getElementById('downloadHigh');
+        const downloadMediumBtn = document.getElementById('downloadMedium');
+        const downloadLowBtn = document.getElementById('downloadLow');
+        const downloadTextHighBtn = document.getElementById('downloadTextHigh');
+        const downloadTextMediumBtn = document.getElementById('downloadTextMedium');
+        const downloadTextLowBtn = document.getElementById('downloadTextLow');
         const themeToggle = document.getElementById('themeToggle');
         const langToggle = document.getElementById('langToggle');
         const canvas = document.getElementById('canvas');
@@ -662,6 +840,17 @@
         const backdropRadiusValue = document.getElementById('backdropRadiusValue');
         const blackWhiteToggle = document.getElementById('blackWhiteToggle');
         const blackWhiteBackdropToggle = document.getElementById('blackWhiteBackdropToggle');
+        const copyStickerBtn = document.getElementById('copyStickerBtn');
+
+        const panels = document.querySelectorAll('.panel');
+        const circles = document.querySelectorAll('.circle');
+        
+        const panelText = document.getElementById('panel-text');
+        const panelColor = document.getElementById('panel-color');
+        const panelEffects = document.getElementById('panel-effects');
+        const circleText = document.getElementById('circle-text');
+        const circleColor = document.getElementById('circle-color');
+        const circleEffects = document.getElementById('circle-effects');
 
 
         const translations = {
@@ -692,17 +881,21 @@
                 labelBackdropHeight: 'ارتفاع کادر',
                 downloadBtn: 'دانلود عکس',
                 downloadTextBtn: 'دانلود متن',
+                downloadHigh: 'کیفیت بالا',
+                downloadMedium: 'کیفیت متوسط',
+                downloadLow: 'کیفیت پایین',
                 copyStickerBtn: 'کپی استیکر',
                 alertImage: 'لطفاً ابتدا یک عکس بارگذاری کنید.',
                 alertText: 'لطفاً متنی برای دانلود وارد کنید.',
                 alertFont: 'شما می‌توانید حداکثر ۳ فونت سفارشی اضافه کنید.',
                 alertFontSuccess: (fileName) => `فونت ${fileName} بارگذاری شد!`,
                 alertFontError: (message) => `خطا در بارگذاری فونت: ${message}`,
-                alertCopyUnsupported: 'مرورگر شما از قابلیت کپی کردن تصویر پشتیبانی نمی‌کند.'
+                alertNoTextToCopy: 'لطفاً متنی برای کپی کردن وارد کنید.',
+                alertCopySuccess: 'استیکر با موفقیت کپی شد!'
             },
             en: {
                 appTitle: 'DACO',
-                appSubtitle: 'Created by @darabiparham',
+                appSubtitle: 'Made by @darabiparham',
                 labelImage: 'Upload Image',
                 initialCanvasText: 'Upload an image',
                 panelText: 'Text',
@@ -727,13 +920,17 @@
                 labelBackdropHeight: 'Backdrop Height',
                 downloadBtn: 'Download Image',
                 downloadTextBtn: 'Download Text',
+                downloadHigh: 'High Quality',
+                downloadMedium: 'Medium Quality',
+                downloadLow: 'Low Quality',
                 copyStickerBtn: 'Copy Sticker',
                 alertImage: 'Please upload an image first.',
                 alertText: 'Please enter text to download.',
                 alertFont: 'You can add a maximum of 3 custom fonts.',
-                alertFontSuccess: (fileName) => `Font ${fileName} uploaded!`,
-                alertFontError: (message) => `Font upload error: ${message}`,
-                alertCopyUnsupported: 'Your browser does not support image clipboard copying.'
+                alertFontSuccess: (fileName) => `Font ${fileName} loaded!`,
+                alertFontError: (message) => `Error loading font: ${message}`,
+                alertNoTextToCopy: 'Please enter text to copy.',
+                alertCopySuccess: 'Sticker copied successfully!'
             }
         };
 
@@ -748,7 +945,7 @@
             document.getElementById('appTitle').textContent = t.appTitle;
             document.getElementById('appSubtitle').textContent = t.appSubtitle;
             document.getElementById('label-image').textContent = t.labelImage;
-            document.getElementById('panel-text').textContent = t.panelText;
+            document.getElementById('panel-text-header').textContent = t.panelText;
             document.getElementById('textInput').placeholder = t.textInputPlaceholder;
             document.getElementById('label-font').textContent = t.labelFont;
             document.getElementById('label-font-size').textContent = t.labelFontSize;
@@ -758,7 +955,7 @@
             document.getElementById('label-green').textContent = t.labelGreen;
             document.getElementById('label-blue').textContent = t.labelBlue;
             document.getElementById('label-opacity').textContent = t.labelOpacity;
-            document.getElementById('panel-effects').textContent = t.panelEffects;
+            document.getElementById('panel-effects-header').textContent = t.panelEffects;
             document.getElementById('label-shadow').textContent = t.labelShadow;
             document.getElementById('label-stroke').textContent = t.labelStroke;
             document.getElementById('label-glow').textContent = t.labelGlow;
@@ -770,6 +967,12 @@
             document.getElementById('label-backdrop-height').textContent = t.labelBackdropHeight;
             document.getElementById('downloadBtn').textContent = t.downloadBtn;
             document.getElementById('downloadTextBtn').textContent = t.downloadTextBtn;
+            document.getElementById('downloadHigh').textContent = t.downloadHigh;
+            document.getElementById('downloadMedium').textContent = t.downloadMedium;
+            document.getElementById('downloadLow').textContent = t.downloadLow;
+            document.getElementById('downloadTextHigh').textContent = t.downloadHigh;
+            document.getElementById('downloadTextMedium').textContent = t.downloadMedium;
+            document.getElementById('downloadTextLow').textContent = t.downloadLow;
             document.getElementById('copyStickerBtn').textContent = t.copyStickerBtn;
 
             updateSliderValues();
@@ -777,6 +980,7 @@
         }
 
         let img = null;
+        let originalImgSize = { width: 0, height: 0 };
         let fontSize = 50;
         let textColor = 'rgb(0,0,0)';
         let textOpacity = 1;
@@ -806,6 +1010,28 @@
             currentLang = e.target.checked ? 'en' : 'fa';
             setLanguage(currentLang);
         });
+        
+        function handleAccordion(panelId) {
+            panels.forEach(panel => {
+                if (panel.id === panelId) {
+                    panel.classList.toggle('open');
+                } else {
+                    panel.classList.remove('open');
+                }
+            });
+            circles.forEach(circle => {
+                if (`panel-${circle.id.split('-')[1]}` === panelId) {
+                    circle.classList.toggle('active');
+                } else {
+                    circle.classList.remove('active');
+                }
+            });
+        }
+        
+        circleText.addEventListener('click', () => handleAccordion('panel-text'));
+        circleColor.addEventListener('click', () => handleAccordion('panel-color'));
+        circleEffects.addEventListener('click', () => handleAccordion('panel-effects'));
+
 
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -818,8 +1044,12 @@
             reader.onload = (ev) => {
                 img = new Image();
                 img.onload = () => {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+                    originalImgSize.width = img.width;
+                    originalImgSize.height = img.height;
+                    const containerWidth = document.querySelector('.canvas-container').offsetWidth;
+                    const scaleFactor = containerWidth / img.width;
+                    canvas.width = img.width * scaleFactor;
+                    canvas.height = img.height * scaleFactor;
                     selectedTextBox.x = (canvas.width - selectedTextBox.width) / 2;
                     selectedTextBox.y = (canvas.height - selectedTextBox.height) / 2;
                     drawCanvas();
@@ -913,33 +1143,19 @@
 
 
         function updateSliderValues() {
-            if (currentLang === 'fa') {
-                fontSizeValue.textContent = numToFa(fontSizeSlider.value);
-                redValue.textContent = numToFa(redSlider.value);
-                greenValue.textContent = numToFa(greenSlider.value);
-                blueValue.textContent = numToFa(blueSlider.value);
-                opacityValue.textContent = numToFa(opacitySlider.value) + '٪';
-                shadowValue.textContent = numToFa(shadowSlider.value);
-                strokeValue.textContent = numToFa(strokeSlider.value);
-                glowValue.textContent = numToFa(glowSlider.value);
-                backdropOpacityValue.textContent = numToFa(backdropOpacitySlider.value) + '٪';
-                backdropRadiusValue.textContent = numToFa(backdropRadiusSlider.value);
-                backdropWidthValue.textContent = numToFa(backdropWidthSlider.value);
-                backdropHeightValue.textContent = numToFa(backdropHeightSlider.value);
-            } else {
-                fontSizeValue.textContent = fontSizeSlider.value;
-                redValue.textContent = redSlider.value;
-                greenValue.textContent = greenSlider.value;
-                blueValue.textContent = blueSlider.value;
-                opacityValue.textContent = opacitySlider.value + '%';
-                shadowValue.textContent = shadowSlider.value;
-                strokeValue.textContent = strokeSlider.value;
-                glowValue.textContent = glowSlider.value;
-                backdropOpacityValue.textContent = backdropOpacitySlider.value + '%';
-                backdropRadiusValue.textContent = backdropRadiusSlider.value;
-                backdropWidthValue.textContent = backdropWidthSlider.value;
-                backdropHeightValue.textContent = backdropHeightSlider.value;
-            }
+            const formatValue = (value) => currentLang === 'fa' ? numToFa(value) : value;
+            fontSizeValue.textContent = formatValue(fontSizeSlider.value);
+            redValue.textContent = formatValue(redSlider.value);
+            greenValue.textContent = formatValue(greenSlider.value);
+            blueValue.textContent = formatValue(blueSlider.value);
+            opacityValue.textContent = formatValue(opacitySlider.value) + '%';
+            shadowValue.textContent = formatValue(shadowSlider.value);
+            strokeValue.textContent = formatValue(strokeSlider.value);
+            glowValue.textContent = formatValue(glowSlider.value);
+            backdropOpacityValue.textContent = formatValue(backdropOpacitySlider.value) + '٪';
+            backdropRadiusValue.textContent = formatValue(backdropRadiusSlider.value);
+            backdropWidthValue.textContent = formatValue(backdropWidthSlider.value);
+            backdropHeightValue.textContent = formatValue(backdropHeightSlider.value);
         }
 
         blackWhiteToggle.addEventListener('change', (e) => {
@@ -979,7 +1195,7 @@
             if (!img) {
                 initialCanvas = true;
                 const canvasContainer = document.querySelector('.canvas-container');
-                const desiredWidth = canvasContainer.offsetWidth * 0.8;
+                const desiredWidth = canvasContainer.offsetWidth;
                 canvas.width = desiredWidth;
                 canvas.height = desiredWidth * 0.6;
             }
@@ -1010,8 +1226,6 @@
             let calculatedFontSize = fontSize;
             ctx.font = `${calculatedFontSize}px ${currentFont}`;
             textMetrics = ctx.measureText(textToDraw);
-
-            const textHeight = calculatedFontSize * 1.5;
 
             // Calculate font size based on slider value and canvas width
             if (fontSize > 0) {
@@ -1173,7 +1387,7 @@
         canvas.addEventListener(isTouchDevice ? 'touchend' : 'mouseup', handleEnd);
         canvas.addEventListener(isTouchDevice ? 'touchcancel' : 'mouseout', handleEnd);
 
-        function downloadImage() {
+        function downloadImage(quality) {
             const hasText = textInput.value.trim() !== '';
             if (!img && !hasText) {
                 alert(translations[currentLang].alertImage);
@@ -1183,59 +1397,75 @@
             const tempDownloadCanvas = document.createElement('canvas');
             const tempDownloadCtx = tempDownloadCanvas.getContext('2d');
             
+            let finalWidth, finalHeight;
+
             if (img) {
-                tempDownloadCanvas.width = img.width;
-                tempDownloadCanvas.height = img.height;
-                tempDownloadCtx.drawImage(img, 0, 0);
+                const scale = {
+                    'high': 1.0,
+                    'medium': 0.75,
+                    'low': 0.5
+                }[quality];
+                finalWidth = originalImgSize.width * scale;
+                finalHeight = originalImgSize.height * scale;
+                tempDownloadCanvas.width = finalWidth;
+                tempDownloadCanvas.height = finalHeight;
+                tempDownloadCtx.drawImage(img, 0, 0, finalWidth, finalHeight);
             } else {
-                if (!hasText) {
-                    tempDownloadCanvas.width = canvas.width;
-                    tempDownloadCanvas.height = canvas.height;
+                 if (!hasText) {
+                    finalWidth = 500;
+                    finalHeight = 300;
+                    tempDownloadCanvas.width = finalWidth;
+                    tempDownloadCanvas.height = finalHeight;
                     tempDownloadCtx.fillStyle = "#e0e0e0";
                     tempDownloadCtx.fillRect(0, 0, tempDownloadCanvas.width, tempDownloadCanvas.height);
-                } else {
+                 } else {
                     const textToDraw = textInput.value;
-                    let calculatedDownloadFontSize = fontSize;
-                    if (fontSize > 0) {
-                         let tempFontSize = (fontSize / 100) * canvas.width;
-                         tempDownloadCtx.font = `${tempFontSize}px ${currentFont}`;
-                         let tempMetrics = tempDownloadCtx.measureText(textToDraw);
-                         if (tempMetrics.width > canvas.width) {
-                             const scaleFactor = (canvas.width / tempMetrics.width) * 0.95;
-                             calculatedDownloadFontSize = tempFontSize * scaleFactor;
-                         } else {
-                            calculatedDownloadFontSize = tempFontSize;
-                         }
-                    } else {
-                        calculatedDownloadFontSize = 0;
-                    }
-                    tempDownloadCtx.font = `${calculatedDownloadFontSize}px ${currentFont}`;
-                    const downloadTextMetrics = tempDownloadCtx.measureText(textToDraw);
-
-                    const downloadBackdropPaddingX = (backdropWidthPercentage / 100) * canvas.width;
-                    const downloadBackdropPaddingY = (backdropHeightPercentage / 100) * canvas.height;
-                    
-                    tempDownloadCanvas.width = downloadTextMetrics.width + downloadBackdropPaddingX;
-                    tempDownloadCanvas.height = calculatedDownloadFontSize * 1.5 + downloadBackdropPaddingY;
-
+                    const scale = {
+                        'high': 1.0,
+                        'medium': 0.75,
+                        'low': 0.5
+                    }[quality];
+                    tempDownloadCtx.font = `${100 * scale}px ${currentFont}`;
+                    const textMetrics = tempDownloadCtx.measureText(textToDraw);
+                    const paddingX = (backdropWidthPercentage / 100) * 500 * scale;
+                    const paddingY = (backdropHeightPercentage / 100) * 300 * scale;
+                    finalWidth = textMetrics.width + paddingX;
+                    finalHeight = 100 * 1.5 * scale + paddingY;
+                    tempDownloadCanvas.width = finalWidth;
+                    tempDownloadCanvas.height = finalHeight;
                     tempDownloadCtx.fillStyle = "#e0e0e0";
                     tempDownloadCtx.fillRect(0, 0, tempDownloadCanvas.width, tempDownloadCanvas.height);
-                }
+                 }
             }
             
             if (hasText) {
                 const textToDraw = textInput.value;
                 const canvasTextWidth = textMetrics.width;
                 const canvasTextHeight = fontSize * 1.5;
-                const canvasBackdropWidth = canvasTextWidth + (backdropWidthPercentage / 100) * canvas.width;
-                const canvasBackdropHeight = canvasTextHeight + (backdropHeightPercentage / 100) * canvas.height;
-                
-                const finalScale = img ? img.width / canvas.width : 1;
+                const canvasBackdropWidth = selectedTextBox.width;
+                const canvasBackdropHeight = selectedTextBox.height;
+
+                const finalScale = finalWidth / canvas.width;
                 const finalBackdropWidth = canvasBackdropWidth * finalScale;
                 const finalBackdropHeight = canvasBackdropHeight * finalScale;
                 const finalX = selectedTextBox.x * finalScale;
                 const finalY = selectedTextBox.y * finalScale;
-                const finalFontSize = calculatedFontSize * finalScale;
+
+                let calculatedFinalFontSize = fontSize;
+                if (fontSize > 0) {
+                    let tempFontSize = (fontSize / 100) * canvas.width;
+                    tempDownloadCtx.font = `${tempFontSize}px ${currentFont}`;
+                    let tempMetrics = tempDownloadCtx.measureText(textToDraw);
+                    if (tempMetrics.width > canvas.width) {
+                        const scaleFactor = (canvas.width / tempMetrics.width) * 0.95;
+                        calculatedFinalFontSize = tempFontSize * scaleFactor;
+                    } else {
+                        calculatedFinalFontSize = tempFontSize;
+                    }
+                } else {
+                    calculatedFinalFontSize = 0;
+                }
+                const finalFontSize = calculatedFinalFontSize * finalScale;
                 const finalRadius = (backdropRadius / 100) * Math.min(finalBackdropWidth, finalBackdropHeight) / 2;
 
                 if (backdropOpacity > 0) {
@@ -1279,7 +1509,7 @@
             }
 
             const link = document.createElement('a');
-            link.download = 'edited_image.png';
+            link.download = `edited_image_${quality}.png`;
             link.href = tempDownloadCanvas.toDataURL('image/png');
             document.body.appendChild(link);
             link.click();
@@ -1287,49 +1517,41 @@
             drawCanvas();
         }
         
-        downloadBtn.addEventListener('click', downloadImage);
-        
-        downloadTextBtn.addEventListener('click', () => {
+        function downloadText(quality) {
             const hasText = textInput.value.trim() !== '';
             if (!hasText) {
                 alert(translations[currentLang].alertText);
                 return;
             }
+            
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             
             const textToDraw = textInput.value;
-            let calculatedDownloadFontSize = fontSize;
-            if (fontSize > 0) {
-                 let tempFontSize = (fontSize / 100) * canvas.width;
-                 tempCtx.font = `${tempFontSize}px ${currentFont}`;
-                 let tempMetrics = tempCtx.measureText(textToDraw);
-                 if (tempMetrics.width > canvas.width) {
-                     const scaleFactor = (canvas.width / tempMetrics.width) * 0.95;
-                     calculatedDownloadFontSize = tempFontSize * scaleFactor;
-                 } else {
-                    calculatedDownloadFontSize = tempFontSize;
-                 }
-            } else {
-                calculatedDownloadFontSize = 0;
-            }
-            tempCtx.font = `${calculatedDownloadFontSize}px ${currentFont}`;
+            const scale = {
+                'high': 1.0,
+                'medium': 0.75,
+                'low': 0.5
+            }[quality];
+
+            const baseWidth = 500;
+            const baseHeight = 300;
+
+            tempCtx.font = `${100 * scale}px ${currentFont}`;
             const textMetrics = tempCtx.measureText(textToDraw);
-            
-            const paddingX = (backdropWidthPercentage / 100) * canvas.width;
-            const paddingY = (backdropHeightPercentage / 100) * canvas.height;
+
+            const paddingX = (backdropWidthPercentage / 100) * baseWidth * scale;
+            const paddingY = (backdropHeightPercentage / 100) * baseHeight * scale;
             
             tempCanvas.width = textMetrics.width + paddingX;
-            tempCanvas.height = calculatedDownloadFontSize * 1.5 + paddingY;
+            tempCanvas.height = 100 * 1.5 * scale + paddingY;
             
-            tempCtx.fillStyle = "#e0e0e0";
-            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            const borderRadius = (backdropRadius / 100) * Math.min(tempCanvas.width, tempCanvas.height) / 2;
 
             if (backdropOpacity > 0) {
                 tempCtx.fillStyle = backdropColor;
                 tempCtx.globalAlpha = backdropOpacity;
-                const borderRadius = (backdropRadius / 100) * Math.min(tempCanvas.width, tempCanvas.height) / 2;
-
+                
                 tempCtx.beginPath();
                 tempCtx.moveTo(borderRadius, 0);
                 tempCtx.lineTo(tempCanvas.width - borderRadius, 0);
@@ -1345,126 +1567,123 @@
                 tempCtx.globalAlpha = 1;
             }
             
+            let calculatedDownloadFontSize = (fontSize / 100) * baseWidth;
+            tempCtx.font = `${calculatedDownloadFontSize}px ${currentFont}`;
+            const tempMetrics = tempCtx.measureText(textToDraw);
+            if (tempMetrics.width > baseWidth) {
+                const scaleFactor = (baseWidth / tempMetrics.width) * 0.95;
+                calculatedDownloadFontSize *= scaleFactor;
+            }
+            calculatedDownloadFontSize *= scale;
+
             tempCtx.font = `${calculatedDownloadFontSize}px ${currentFont}`;
             tempCtx.fillStyle = textColor;
             tempCtx.globalAlpha = textOpacity;
             tempCtx.textAlign = "center";
             tempCtx.textBaseline = "middle";
+            
+            tempCtx.shadowColor = `rgb(0,0,0)`;
+            tempCtx.shadowBlur = shadowBlur * scale;
+            tempCtx.strokeStyle = `rgb(0,0,0)`;
+            tempCtx.lineWidth = strokeWidth * 2 * scale;
+            tempCtx.lineJoin = 'round';
+            if (strokeWidth > 0) {
+                 tempCtx.strokeText(textToDraw, tempCanvas.width / 2, tempCanvas.height / 2);
+            }
+            tempCtx.shadowColor = textColor;
+            tempCtx.shadowBlur = glowBlur * scale;
+            tempCtx.fillStyle = textColor;
             tempCtx.fillText(textToDraw, tempCanvas.width / 2, tempCanvas.height / 2);
             tempCtx.globalAlpha = 1;
+            tempCtx.shadowBlur = 0;
 
             const link = document.createElement('a');
-            link.download = 'text_only.png';
+            link.download = `text_only_${quality}.png`;
             link.href = tempCanvas.toDataURL('image/png');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        downloadHighBtn.addEventListener('click', () => downloadImage('high'));
+        downloadMediumBtn.addEventListener('click', () => downloadImage('medium'));
+        downloadLowBtn.addEventListener('click', () => downloadImage('low'));
+        
+        downloadTextHighBtn.addEventListener('click', () => downloadText('high'));
+        downloadTextMediumBtn.addEventListener('click', () => downloadText('medium'));
+        downloadTextLowBtn.addEventListener('click', () => downloadText('low'));
+        
+        copyStickerBtn.addEventListener('click', () => {
+            const hasText = textInput.value.trim() !== '';
+            if (!hasText) {
+                alert(translations[currentLang].alertNoTextToCopy);
+                return;
+            }
+
+            const offscreenCanvas = document.createElement('canvas');
+            const offscreenCtx = offscreenCanvas.getContext('2d');
+            const textToDraw = textInput.value;
+
+            const baseFontSize = 100;
+            offscreenCtx.font = `${baseFontSize}px ${currentFont}`;
+            const textMetrics = offscreenCtx.measureText(textToDraw);
+
+            const baseWidth = 500;
+            const baseHeight = 300;
+
+            const paddingX = (backdropWidthPercentage / 100) * baseWidth;
+            const paddingY = (backdropHeightPercentage / 100) * baseHeight;
+            
+            offscreenCanvas.width = textMetrics.width + paddingX + 20; 
+            offscreenCanvas.height = baseFontSize * 1.5 + paddingY + 20;
+
+            const borderRadius = (backdropRadius / 100) * Math.min(offscreenCanvas.width, offscreenCanvas.height) / 2;
+            const centerX = offscreenCanvas.width / 2;
+            const centerY = offscreenCanvas.height / 2;
+            const backdropX = centerX - (offscreenCanvas.width - 20) / 2;
+            const backdropY = centerY - (offscreenCanvas.height - 20) / 2;
+            const backdropWidth = offscreenCanvas.width - 20;
+            const backdropHeight = offscreenCanvas.height - 20;
+            
+            if (backdropOpacity > 0) {
+                offscreenCtx.fillStyle = backdropColor;
+                offscreenCtx.globalAlpha = backdropOpacity;
+                
+                offscreenCtx.beginPath();
+                offscreenCtx.moveTo(backdropX + borderRadius, backdropY);
+                offscreenCtx.lineTo(backdropX + backdropWidth - borderRadius, backdropY);
+                offscreenCtx.arcTo(backdropX + backdropWidth, backdropY, backdropX + backdropWidth, backdropY + borderRadius, borderRadius);
+                offscreenCtx.lineTo(backdropX + backdropWidth, backdropY + backdropHeight - borderRadius);
+                offscreenCtx.arcTo(backdropX + backdropWidth, backdropY + backdropHeight, backdropX + backdropWidth - borderRadius, backdropY + backdropHeight, borderRadius);
+                offscreenCtx.lineTo(backdropX + borderRadius, backdropY + backdropHeight);
+                offscreenCtx.arcTo(backdropX, backdropY + backdropHeight, backdropX, backdropY + backdropHeight - borderRadius, borderRadius);
+                offscreenCtx.lineTo(backdropX, backdropY + borderRadius);
+                offscreenCtx.arcTo(backdropX, backdropY, backdropX + borderRadius, backdropY, borderRadius);
+                offscreenCtx.closePath();
+                offscreenCtx.fill();
+                offscreenCtx.globalAlpha = 1;
+            }
+
+            offscreenCtx.font = `${baseFontSize}px ${currentFont}`;
+            offscreenCtx.fillStyle = textColor;
+            offscreenCtx.globalAlpha = textOpacity;
+            offscreenCtx.textAlign = "center";
+            offscreenCtx.textBaseline = "middle";
+            offscreenCtx.fillText(textToDraw, centerX, centerY);
+            offscreenCtx.globalAlpha = 1;
+
+            offscreenCanvas.toBlob(async (blob) => {
+                const item = new ClipboardItem({'image/png': blob});
+                try {
+                    await navigator.clipboard.write([item]);
+                    alert(translations[currentLang].alertCopySuccess);
+                } catch (err) {
+                    console.error('Failed to copy image: ', err);
+                    alert('خطا در کپی کردن استیکر. مرورگر شما از این قابلیت پشتیبانی نمی‌کند یا دسترسی لازم را ندارد.');
+                }
+            }, 'image/png');
         });
 
-        async function copyAsSticker() {
-            if (!img) {
-                alert(translations[currentLang].alertImage);
-                return;
-            }
-
-            if (!navigator.clipboard || !navigator.clipboard.write) {
-                alert(translations[currentLang].alertCopyUnsupported);
-                return;
-            }
-
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            tempCanvas.width = img.width;
-            tempCanvas.height = img.height;
-            tempCtx.drawImage(img, 0, 0);
-
-            const textToDraw = textInput.value;
-            const hasText = textToDraw.trim() !== '';
-
-            if (hasText) {
-                let calculatedDownloadFontSize = fontSize;
-                if (fontSize > 0) {
-                     let tempFontSize = (fontSize / 100) * canvas.width;
-                     tempCtx.font = `${tempFontSize}px ${currentFont}`;
-                     let tempMetrics = tempCtx.measureText(textToDraw);
-                     if (tempMetrics.width > canvas.width) {
-                         const scaleFactor = (canvas.width / tempMetrics.width) * 0.95;
-                         calculatedDownloadFontSize = tempFontSize * scaleFactor;
-                     } else {
-                        calculatedDownloadFontSize = tempFontSize;
-                     }
-                } else {
-                    calculatedDownloadFontSize = 0;
-                }
-                
-                const canvasTextWidth = textMetrics.width;
-                const canvasTextHeight = fontSize * 1.5;
-                const canvasBackdropWidth = canvasTextWidth + (backdropWidthPercentage / 100) * canvas.width;
-                const canvasBackdropHeight = canvasTextHeight + (backdropHeightPercentage / 100) * canvas.height;
-                
-                const finalScale = img.width / canvas.width;
-                const finalBackdropWidth = canvasBackdropWidth * finalScale;
-                const finalBackdropHeight = canvasBackdropHeight * finalScale;
-                const finalX = selectedTextBox.x * finalScale;
-                const finalY = selectedTextBox.y * finalScale;
-                const finalFontSize = calculatedDownloadFontSize * finalScale;
-                const finalRadius = (backdropRadius / 100) * Math.min(finalBackdropWidth, finalBackdropHeight) / 2;
-
-                if (backdropOpacity > 0) {
-                    tempCtx.fillStyle = backdropColor;
-                    tempCtx.globalAlpha = backdropOpacity;
-                    tempCtx.beginPath();
-                    tempCtx.moveTo(finalX + finalRadius, finalY);
-                    tempCtx.lineTo(finalX + finalBackdropWidth - finalRadius, finalY);
-                    tempCtx.arcTo(finalX + finalBackdropWidth, finalY, finalX + finalBackdropWidth, finalY + finalRadius, finalRadius);
-                    tempCtx.lineTo(finalX + finalBackdropWidth, finalY + finalBackdropHeight - finalRadius);
-                    tempCtx.arcTo(finalX + finalBackdropWidth, finalY + finalBackdropHeight, finalX + finalBackdropWidth - finalRadius, finalY + finalBackdropHeight, finalRadius);
-                    tempCtx.lineTo(finalX + finalRadius, finalY + finalBackdropHeight);
-                    tempCtx.arcTo(finalX, finalY + finalBackdropHeight, finalX, finalY + finalBackdropHeight - finalRadius, finalRadius);
-                    tempCtx.lineTo(finalX, finalY + finalRadius);
-                    tempCtx.arcTo(finalX, finalY, finalX + finalRadius, finalY, finalRadius);
-                    tempCtx.closePath();
-                    tempCtx.fill();
-                    tempCtx.globalAlpha = 1;
-                }
-
-                tempCtx.font = `${finalFontSize}px ${currentFont}`;
-                tempCtx.globalAlpha = textOpacity;
-                tempCtx.textAlign = "center";
-                tempCtx.textBaseline = "middle";
-                tempCtx.shadowColor = `rgb(0,0,0)`;
-                tempCtx.shadowBlur = shadowBlur;
-                tempCtx.strokeStyle = `rgb(0,0,0)`;
-                tempCtx.lineWidth = strokeWidth * 2;
-                tempCtx.lineJoin = 'round';
-                if (strokeWidth > 0) {
-                     tempCtx.strokeText(textToDraw, finalX + finalBackdropWidth / 2, finalY + finalBackdropHeight / 2);
-                }
-                tempCtx.shadowColor = textColor;
-                tempCtx.shadowBlur = glowBlur;
-                tempCtx.fillStyle = textColor;
-                tempCtx.fillText(textToDraw, finalX + finalBackdropWidth / 2, finalY + finalBackdropHeight / 2);
-                tempCtx.globalAlpha = 1;
-                tempCtx.shadowBlur = 0;
-            }
-
-            try {
-                const blob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/png'));
-                await navigator.clipboard.write([
-                    new ClipboardItem({
-                        'image/png': blob
-                    })
-                ]);
-                alert('تصویر به کلیپ‌بورد کپی شد!');
-            } catch (err) {
-                console.error('Failed to copy image to clipboard: ', err);
-                alert('خطا در کپی تصویر.');
-            }
-        }
-        
-        copyStickerBtn.addEventListener('click', copyAsSticker);
-        
         setLanguage('fa');
         drawCanvas();
     </script>
